@@ -7,7 +7,7 @@ const ProjectList = () => {
 
   useEffect(() => {
     const fetchProjects = async () => {
-      const response = await fetch('https://api.github.com/users/YOUR_GITHUB_USERNAME/repos');
+      const response = await fetch('https://api.github.com/users/saikothouse/repos');
       const data = await response.json();
       setProjects(data);
       setLoading(false);
