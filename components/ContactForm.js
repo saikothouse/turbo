@@ -2,30 +2,34 @@ import { useState } from 'react';
 import emailjs from '@emailjs/browser';
 
 const ContactForm = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [sent, setSent] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', formData, 'YOUR_USER_ID')
+    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
+      name,
+      email,
+      message,
+    }, 'YOUR_PUBLIC_KEY')
       .then((response) => {
-        console.log('SUCCESS!', response.status, response.text);
-      }, (err) => {
-        console.log('FAILED...', err);
+        console.log(response);
+        setSent(true);
+      })
+      .catch((error) => {
+        console.error(error);
       });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 bg-gray-800 rounded-lg shadow-lg">
-      <h3 className="text-xl font-bold">Get in Touch</h3>
-      <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your Name" className="block w-full p-2 mb-2 bg-gray-700 rounded-lg" />
-      <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Your Email" className="block w-full p-2 mb-2 bg-gray-700 rounded-lg" />
-      <textarea name="message" value={formData.message} onChange={handleChange} placeholder="Your Message" className="block w-full p-2 mb-2 bg-gray-700 rounded-lg" />
-      <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-lg">Send</button>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" className="p-2 bg-gray-100 rounded-lg" />
+      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="p-2 bg-gray-100 rounded-lg" />
+      <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Message" className="p-2 bg-gray-100 rounded-lg" />
+      <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">Send</button>
+      {sent && <p className="text-green-500">Message sent successfully!</p>}
     </form>
   );
 };
