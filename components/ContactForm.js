@@ -1,3 +1,5 @@
+"use client"; // Add this line to make it a client component
+
 import { useState } from 'react';
 import emailjs from '@emailjs/browser';
 
@@ -15,7 +17,7 @@ const ContactForm = () => {
       message,
     }, 'YOUR_PUBLIC_KEY')
       .then((response) => {
-        console.log(response);
+        console.log(response );
         setSent(true);
       })
       .catch((error) => {
